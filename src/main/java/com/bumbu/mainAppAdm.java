@@ -1,0 +1,455 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.bumbu;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import java.beans.PropertyVetoException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import view.viewBarang;
+import view.viewKasir;
+import view.viewLogin;
+import view.viewPemasok;
+import view.viewPendapatan;
+import view.viewTransaksi;
+
+public class mainAppAdm extends javax.swing.JFrame {
+
+    /**
+     * Creates new form mainApp
+     */
+    public mainAppAdm() {
+        initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        Tema.pasangLogo(logo, 77);
+        rapikan();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+    }
+
+    private JButton menuAktif;
+    private JButton navKeluar;
+
+    private void rapikan() {
+        setTitle("UD. Ilham Jaya");
+
+        // ===== Header =====
+        JPanel kotakLogo = new JPanel(new BorderLayout());
+        kotakLogo.setOpaque(false);
+        kotakLogo.setPreferredSize(new Dimension(80, 80));
+        logo.setHorizontalAlignment(SwingConstants.CENTER);
+        kotakLogo.add(logo, BorderLayout.CENTER);
+
+        JPanel penyeimbang = new JPanel();
+        penyeimbang.setOpaque(false);
+        penyeimbang.setPreferredSize(new Dimension(80, 80));
+
+        Tema.bannerUtama(jPanel1, jLabel1);
+        jPanel1.removeAll();
+        jPanel1.setLayout(new BorderLayout());
+        jPanel1.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+        jPanel1.add(kotakLogo, BorderLayout.WEST);
+        jPanel1.add(jLabel1, BorderLayout.CENTER);
+        jPanel1.add(penyeimbang, BorderLayout.EAST);
+
+        // ===== Menu samping =====
+        jPanel2.removeAll();
+        jPanel2.setLayout(new BoxLayout(jPanel2, BoxLayout.Y_AXIS));
+        jPanel2.setBackground(Tema.PANEL);
+        jPanel2.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 0, 1, Tema.GARIS),
+                BorderFactory.createEmptyBorder(12, 10, 12, 10)));
+        jPanel2.setPreferredSize(new Dimension(Tema.LEBAR_MENU, 100));
+
+        JButton[] daftar = {navKasir, navBarang, navPemasok, navTransaksi, navPendapatan};
+        String[] ikon = {"shopping-cart", "package", "truck", "receipt", "wallet"};
+        for (int i = 0; i < daftar.length; i++) {
+            final JButton b = daftar[i];
+            Tema.tombolMenu(b, ikon[i]);
+            b.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    pilihMenu(b);
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    if (b != menuAktif) {
+                        Tema.hoverMenu(b, true);
+                    }
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    if (b != menuAktif) {
+                        Tema.hoverMenu(b, false);
+                    }
+                }
+            });
+            jPanel2.add(b);
+            jPanel2.add(Box.createVerticalStrut(8));
+        }
+        jPanel2.add(Box.createVerticalGlue());
+
+        // ===== Tombol Keluar (di bawah, terpisah dari menu lain) =====
+        navKeluar = new JButton("KELUAR");
+        Tema.tombolHapus(navKeluar, "log-out");
+        navKeluar.setFont(Tema.FONT_MENU);
+        navKeluar.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+        navKeluar.setPreferredSize(new Dimension(Tema.LEBAR_MENU - 20, Tema.TINGGI_MENU));
+        navKeluar.setMinimumSize(new Dimension(Tema.LEBAR_MENU - 20, Tema.TINGGI_MENU));
+        navKeluar.setMaximumSize(new Dimension(Integer.MAX_VALUE, Tema.TINGGI_MENU));
+        navKeluar.addActionListener((java.awt.event.ActionEvent e) -> {
+            keluar();
+        });
+        jPanel2.add(navKeluar);
+
+        // ===== Susunan utama =====
+        mainDesktop.setBackground(Tema.PUTIH);
+        getContentPane().removeAll();
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(jPanel1, BorderLayout.NORTH);
+        getContentPane().add(jPanel2, BorderLayout.WEST);
+        getContentPane().add(mainDesktop, BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    }
+
+    private void pilihMenu(JButton dipilih) {
+        menuAktif = dipilih;
+        Tema.aktifkanMenu(dipilih, navKasir, navBarang, navPemasok, navTransaksi, navPendapatan);
+    }
+
+    private void keluar() {
+        if (Dialog.konfirmasi(this, "Yakin ingin keluar?")) {
+            new viewLogin().setVisible(true);
+            dispose();
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        logo = new javax.swing.JLabel();
+        mainDesktop = new javax.swing.JDesktopPane();
+        jPanel2 = new javax.swing.JPanel();
+        navBarang = new javax.swing.JButton();
+        navTransaksi = new javax.swing.JButton();
+        navPemasok = new javax.swing.JButton();
+        navPendapatan = new javax.swing.JButton();
+        navKasir = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("SI BAMBU - Halaman Admin");
+        setBackground(new java.awt.Color(102, 102, 102));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+
+        jPanel1.setBackground(new java.awt.Color(235, 1, 8));
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Microsoft YaHei", 3, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("UD. ILHAM JAYA");
+
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logo.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 805, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
+        );
+
+        mainDesktop.setBackground(new java.awt.Color(153, 153, 153));
+        mainDesktop.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        mainDesktop.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
+
+        javax.swing.GroupLayout mainDesktopLayout = new javax.swing.GroupLayout(mainDesktop);
+        mainDesktop.setLayout(mainDesktopLayout);
+        mainDesktopLayout.setHorizontalGroup(
+            mainDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        mainDesktopLayout.setVerticalGroup(
+            mainDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jPanel2.setBackground(new java.awt.Color(153, 153, 153));
+
+        navBarang.setFont(new java.awt.Font("Microsoft YaHei", 3, 14)); // NOI18N
+        navBarang.setText("BARANG");
+        navBarang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                navBarangMousePressed(evt);
+            }
+        });
+        navBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                navBarangActionPerformed(evt);
+            }
+        });
+
+        navTransaksi.setFont(new java.awt.Font("Microsoft YaHei", 3, 14)); // NOI18N
+        navTransaksi.setText("TRANSAKSI");
+        navTransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                navTransaksiMousePressed(evt);
+            }
+        });
+
+        navPemasok.setFont(new java.awt.Font("Microsoft YaHei", 3, 14)); // NOI18N
+        navPemasok.setText("PEMASOK");
+        navPemasok.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                navPemasokMousePressed(evt);
+            }
+        });
+
+        navPendapatan.setFont(new java.awt.Font("Microsoft YaHei", 3, 14)); // NOI18N
+        navPendapatan.setText("PENDAPATAN");
+        navPendapatan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                navPendapatanMousePressed(evt);
+            }
+        });
+
+        navKasir.setFont(new java.awt.Font("Microsoft YaHei", 3, 14)); // NOI18N
+        navKasir.setText("PENJUALAN");
+        navKasir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                navKasirMousePressed(evt);
+            }
+        });
+        navKasir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                navKasirActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(navBarang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(navTransaksi, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+            .addComponent(navPemasok, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(navPendapatan, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+            .addComponent(navKasir, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(navBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(navPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(navTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(navKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(navPendapatan, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(390, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mainDesktop)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(mainDesktop)))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void navBarangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navBarangMousePressed
+        // TODO add your handling code here:
+        this.mainDesktop.removeAll();
+        viewBarang vB = new viewBarang();
+        this.mainDesktop.add(vB);
+        vB.setMaximumSize(vB.getMaximumSize());
+        vB.setVisible(true);
+        try {
+            vB.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(mainAppAdm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_navBarangMousePressed
+
+    private void navTransaksiMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navTransaksiMousePressed
+        // TODO add your handling code here:
+        this.mainDesktop.removeAll();
+        viewTransaksi v = new viewTransaksi();
+        this.mainDesktop.add(v);
+        v.setMaximumSize(v.getMaximumSize());
+        v.setVisible(true);
+        try {
+            v.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(mainAppAdm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_navTransaksiMousePressed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        viewLogin v = new viewLogin();
+        v.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void navPemasokMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navPemasokMousePressed
+        // TODO add your handling code here:
+        this.mainDesktop.removeAll();
+        viewPemasok v = new viewPemasok();
+        this.mainDesktop.add(v);
+        v.setMaximumSize(v.getMaximumSize());
+        v.setVisible(true);
+        try {
+            v.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(mainAppAdm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_navPemasokMousePressed
+
+    private void navBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_navBarangActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_navBarangActionPerformed
+
+    private void navPendapatanMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navPendapatanMousePressed
+        // TODO add your handling code here:
+        this.mainDesktop.removeAll();
+        viewPendapatan v = new viewPendapatan();
+        this.mainDesktop.add(v);
+        v.setMaximumSize(v.getMaximumSize());
+        v.setVisible(true);
+        try {
+            v.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(mainAppAdm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_navPendapatanMousePressed
+
+    private void navKasirMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navKasirMousePressed
+        // TODO add your handling code here:
+        this.mainDesktop.removeAll();
+        viewKasir v = new viewKasir();
+        this.mainDesktop.add(v);
+        v.setMaximumSize(v.getMaximumSize());
+        v.setVisible(true);
+        try {
+            v.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(mainAppAdm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_navKasirMousePressed
+
+    private void navKasirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_navKasirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_navKasirActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(mainAppAdm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(mainAppAdm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(mainAppAdm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(mainAppAdm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new mainAppAdm().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel logo;
+    private javax.swing.JDesktopPane mainDesktop;
+    private javax.swing.JButton navBarang;
+    private javax.swing.JButton navKasir;
+    private javax.swing.JButton navPemasok;
+    private javax.swing.JButton navPendapatan;
+    private javax.swing.JButton navTransaksi;
+    // End of variables declaration//GEN-END:variables
+}
