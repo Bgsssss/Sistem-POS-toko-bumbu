@@ -156,8 +156,10 @@ public class controllerKasir {
             Dialog.peringatan(vK, "Keranjang masih kosong!");
             return false;
         }
+
+        long bayar = Long.parseLong(vK.getBayar().getText());
         Kasir k = new Kasir();
-        boolean ok = k.simpanTransaksi(vK.getNamaPembeli().getText().trim(), items);
+        boolean ok = k.simpanTransaksi(vK.getNamaPembeli().getText().trim(), items, bayar, Sesi.namaKasir);
         if (ok) {
             Dialog.info(vK, "Transaksi berhasil disimpan");
 
@@ -169,7 +171,7 @@ public class controllerKasir {
             d.pembeli = vK.getNamaPembeli().getText();
             d.items = items;
             d.total = Long.parseLong(vK.getTotal().getText());
-            d.bayar = Long.parseLong(vK.getBayar().getText());
+            d.bayar = bayar;
             Struk.tampilkan(vK, d);
         }
         return ok;

@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 import com.bumbu.Tema;
 import database.Koneksi;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -253,7 +254,6 @@ public class viewTransaksi extends javax.swing.JInternalFrame {
 
         int baris = tabelPilih.getSelectedRow();
         if (baris < 0 || baris >= idDaftar.size()) {
-            lblInfo.setText("Pilih satu transaksi di atas");
             return;
         }
         long id = idDaftar.get(baris);
@@ -262,11 +262,9 @@ public class viewTransaksi extends javax.swing.JInternalFrame {
             Connection c = Koneksi.getConnect();
             Struk.Data d = new Struk.Data();
             d.salinan = true;     // cetak ulang -> "*** SALINAN ***"
-            d.kasir = null;       // belum tersimpan di database (opsi 2)
-            d.bayar = 0;          // belum tersimpan -> Tunai/Kembali disembunyikan
 
             try (PreparedStatement ps = c.prepareStatement(
-                    "SELECT noTransaksi, tglTransaksi, namaPembeli, total "
+                    "SELECT noTransaksi, tglTransaksi, namaPembeli, total, bayar, kasir "
                     + "FROM transaksi WHERE idTransaksi = ?")) {
                 ps.setLong(1, id);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -278,6 +276,9 @@ public class viewTransaksi extends javax.swing.JInternalFrame {
                     d.waktu = rs.getTimestamp("tglTransaksi").toLocalDateTime();
                     d.pembeli = rs.getString("namaPembeli");
                     d.total = rs.getBigDecimal("total").longValue();
+                    d.kasir = rs.getString("kasir");
+                    BigDecimal b = rs.getBigDecimal("bayar");
+                    d.bayar = (b == null) ? 0 : b.longValue();
                 }
             }
 

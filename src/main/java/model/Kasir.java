@@ -72,7 +72,7 @@ public class Kasir {
      * Simpan transaksi + detail + kurangi stok dalam SATU transaksi database.
      * Jika salah satu langkah gagal (mis. stok kurang), semuanya dibatalkan.
      */
-    public boolean simpanTransaksi(String namaPembeli, List<Item> items) {
+    public boolean simpanTransaksi(String namaPembeli, List<Item> items, long bayar, String kasir) {
         Connection c = null;
         try {
             c = Koneksi.getConnect();
@@ -87,13 +87,16 @@ public class Kasir {
 
             // 1) header transaksi
             long idTrx = 0;
-            String sqlT = "INSERT INTO transaksi (namaPembeli, jmlBarang, total, tglTransaksi) VALUES (?, ?, ?, ?)";
+            String sqlT = "INSERT INTO transaksi (namaPembeli, jmlBarang, total, tglTransaksi, bayar, kasir) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = c.prepareStatement(sqlT, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, namaPembeli);
                 ps.setString(2, String.valueOf(jumlah));
                 ps.setBigDecimal(3, BigDecimal.valueOf(total));
                 LocalDateTime sekarang = LocalDateTime.now();
                 ps.setTimestamp(4, Timestamp.valueOf(sekarang));
+                ps.setBigDecimal(5, BigDecimal.valueOf(bayar));
+                ps.setString(6, kasir);
                 this.waktu = sekarang;
                 ps.executeUpdate();
                 try (ResultSet rs = ps.getGeneratedKeys()) {
