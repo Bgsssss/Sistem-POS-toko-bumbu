@@ -323,7 +323,7 @@ public class viewPendapatan extends javax.swing.JInternalFrame {
             System.out.println("Dari: " + tglDari.getDate());
             System.out.println("Sampai: " + tglSampai.getDate());
 
-            InputStream is = getClass().getResourceAsStream("/laporan/laporanPendapatan.jrxml");
+            InputStream is = getClass().getResourceAsStream("/laporan/laporanPendapatanv3.jrxml");
 
             if (is == null) {
                 JOptionPane.showMessageDialog(null, "File laporan tidak ditemukan!");

@@ -442,7 +442,7 @@ public class viewPemasok extends javax.swing.JInternalFrame {
         try {
             Connection conn = new Koneksi().getConnect();
             HashMap<String, Object> parameter = new HashMap<>();
-            InputStream is = getClass().getResourceAsStream("/laporan/laporanPemasokv3.jrxml");
+            InputStream is = getClass().getResourceAsStream("/laporan/laporanPemasokv4.jrxml");
             JasperReport jr = JasperCompileManager.compileReport(is); 
             JasperPrint jp = JasperFillManager.fillReport(jr, parameter, conn);
             JasperViewer.viewReport(jp, false);

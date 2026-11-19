@@ -1,0 +1,125 @@
+<!-- Created with Jaspersoft Studio version 7.0.6.final using JasperReports Library version 7.0.6-5d2a603fdc6b3db8f842a83383e594f41891534d  -->
+<jasperReport name="laporanPemasok" language="java" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="504bb087-b3f3-43a7-8680-f124e5646397">
+	<property name="com.jaspersoft.studio.data.sql.tables" value="ZGJ0b2tvZGVza3RvcC5wZW1hc29rIEFTICwxMDIsOTcsN2ZiZDM1NGEtYjNkNy00YjBmLTkxYzYt&#xa;NTk1NTBiMWUxZDFhOw=="/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SI_BAMBU"/>
+	<query language="SQL"><![CDATA[SELECT `idPemasok`,
+	`namaPemasok`,
+	alamat,
+	kontak
+FROM dbtokodesktop.pemasok]]></query>
+	<field name="idPemasok" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="idPemasok"/>
+		<property name="com.jaspersoft.studio.field.label" value="idPemasok"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pemasok"/>
+	</field>
+	<field name="namaPemasok" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="namaPemasok"/>
+		<property name="com.jaspersoft.studio.field.label" value="namaPemasok"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pemasok"/>
+	</field>
+	<field name="alamat" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="alamat"/>
+		<property name="com.jaspersoft.studio.field.label" value="alamat"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pemasok"/>
+	</field>
+	<field name="kontak" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="kontak"/>
+		<property name="com.jaspersoft.studio.field.label" value="kontak"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pemasok"/>
+	</field>
+	<background height="802"/>
+	<pageHeader height="122">
+		<element kind="staticText" uuid="d67e1507-7f3d-44fc-bf5e-8d92a9d41d96" x="0" y="25" width="420" height="50" fontName="Times New Roman" fontSize="24.0" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Data Pemasok UD. ILHAM JAYA]]></text>
+		</element>
+		<element kind="staticText" uuid="86195704-e1bd-4577-9d2a-145af4f89b8e" x="0" y="85" width="420" height="32" fontName="SansSerif" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Pasar Induk Kramat Jati Los C Kelurahan Tengah No. 70, RT 003/RW 007, Kecamatan Kramat Jati, Jakarta Timur Telp./WA. 085758368039]]></text>
+		</element>
+		<element kind="image" uuid="831f21c5-c67e-49ba-a528-f159506f4690" x="430" y="15" width="115" height="100" scaleImage="RetainShape" hImageAlign="Center" vImageAlign="Middle">
+			<expression><![CDATA[getClass().getResourceAsStream("/img/logo.png")]]></expression>
+		</element>
+	</pageHeader>
+	<columnHeader height="69">
+		<element kind="staticText" uuid="74634a5d-c9db-4b1f-9bc2-f270cfaa7ee6" x="0" y="45" width="70" height="20" fontName="Times New Roman" fontSize="12.0" vTextAlign="Middle">
+			<text><![CDATA[ID Pemasok]]></text>
+			<box leftPadding="5"/>
+		</element>
+		<element kind="staticText" uuid="5cbfea93-99f7-475f-a9e8-bcff2facc28a" x="70" y="45" width="150" height="20" fontName="Times New Roman" fontSize="12.0" vTextAlign="Middle">
+			<text><![CDATA[Nama Pemasok]]></text>
+			<box leftPadding="5"/>
+		</element>
+		<element kind="staticText" uuid="74779c7c-4cb4-43f9-a07f-9d1998029ba2" x="220" y="45" width="225" height="20" fontName="Times New Roman" fontSize="12.0" vTextAlign="Middle">
+			<text><![CDATA[Alamat]]></text>
+			<box leftPadding="5"/>
+		</element>
+		<element kind="staticText" uuid="df323aaf-8a06-4c9d-9cac-3a16f44edc60" x="445" y="45" width="110" height="20" fontName="Times New Roman" fontSize="12.0" vTextAlign="Middle">
+			<text><![CDATA[Kontak]]></text>
+			<box leftPadding="5"/>
+		</element>
+		<element kind="line" uuid="77650859-e148-447d-9677-4c9a9e1e4e5f" x="0" y="68" width="555" height="1">
+			<pen lineWidth="1.5"/>
+		</element>
+		<element kind="line" uuid="9fd4354a-b009-45e1-b777-c12a3ae35afd" x="0" y="33" width="555" height="1">
+			<pen lineWidth="2.0"/>
+		</element>
+		<element kind="line" uuid="daac2f22-b57a-4d44-b7ca-9548f104183f" x="0" y="38" width="555" height="1">
+			<pen lineWidth="0.75"/>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<element kind="rectangle" uuid="4962a2c4-95b2-452c-8a5e-f08ee1f3b7c1" mode="Opaque" x="0" y="0" width="555" height="20" backcolor="#EFEFEF">
+				<printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
+				<pen lineWidth="0.0"/>
+			</element>
+			<element kind="textField" uuid="0d46513f-36e2-4762-afec-a23dea83f45b" x="0" y="0" width="70" height="20" fontName="Times New Roman" fontSize="12.0" textAdjust="StretchHeight" vTextAlign="Middle">
+				<expression><![CDATA[$F{idPemasok}]]></expression>
+				<box leftPadding="5"/>
+			</element>
+			<element kind="textField" uuid="b17ca060-38ab-4aee-8ab1-fabd7cbe88d8" x="70" y="0" width="150" height="20" fontName="Times New Roman" fontSize="12.0" textAdjust="StretchHeight" vTextAlign="Middle">
+				<expression><![CDATA[$F{namaPemasok}]]></expression>
+				<box leftPadding="5"/>
+			</element>
+			<element kind="textField" uuid="04d8882f-f2d7-4363-aeba-a7dfd874e25b" x="220" y="0" width="225" height="20" fontName="Times New Roman" fontSize="12.0" textAdjust="StretchHeight" vTextAlign="Middle">
+				<expression><![CDATA[$F{alamat}]]></expression>
+				<box leftPadding="5"/>
+			</element>
+			<element kind="textField" uuid="01ec1dcb-51ab-43e0-bd3d-20366e66e144" x="445" y="0" width="110" height="20" fontName="Times New Roman" fontSize="12.0" textAdjust="StretchHeight" vTextAlign="Middle">
+				<expression><![CDATA[$F{kontak}]]></expression>
+				<box leftPadding="5"/>
+			</element>
+		</band>
+	</detail>
+	<columnFooter/>
+	<pageFooter height="20">
+		<element kind="textField" uuid="697746f6-5f39-47e4-922e-bd75748883ec" x="0" y="4" width="300" height="13" fontName="SansSerif" fontSize="8.0">
+			<expression><![CDATA[new java.text.SimpleDateFormat("EEEE, dd MMMM yyyy", new java.util.Locale("id", "ID")).format(new java.util.Date())]]></expression>
+		</element>
+		<element kind="textField" uuid="a4f2453f-13bc-4a5b-b77d-b09c1dde8a63" x="415" y="4" width="100" height="13" fontName="SansSerif" fontSize="8.0" hTextAlign="Right">
+			<expression><![CDATA["Halaman " + $V{PAGE_NUMBER} + " dari"]]></expression>
+		</element>
+		<element kind="textField" uuid="f089a6bb-9b94-4414-8268-a93818d2d97d" x="515" y="4" width="35" height="13" fontName="SansSerif" fontSize="8.0" evaluationTime="Report">
+			<expression><![CDATA[" " + $V{PAGE_NUMBER}]]></expression>
+		</element>
+	</pageFooter>
+	<summary height="175">
+		<element kind="line" uuid="897208a9-8eb0-4059-b1bf-e19796e523f1" x="0" y="1" width="555" height="1">
+			<pen lineWidth="1.0"/>
+		</element>
+		<element kind="textField" uuid="17ae2cd5-f248-4b67-ba72-7315bde09da7" x="373" y="65" width="175" height="16" fontName="SansSerif" fontSize="8.5" bold="true" vTextAlign="Middle">
+			<expression><![CDATA[new java.text.SimpleDateFormat("'Jakarta, 'EEEE dd MMMM yyyy", new java.util.Locale("id", "ID")).format(new java.util.Date())]]></expression>
+		</element>
+		<element kind="staticText" uuid="09105a5c-05d4-48aa-8916-96c54d24872a" x="373" y="88" width="175" height="16" fontName="SansSerif" fontSize="8.5" bold="true" vTextAlign="Middle">
+			<text><![CDATA[Dikeluarkan Oleh,]]></text>
+		</element>
+		<element kind="staticText" uuid="0b31e3d2-5b69-4f62-a9db-4884d4a3973c" x="373" y="135" width="175" height="16" fontName="SansSerif" fontSize="8.5" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Uni El]]></text>
+		</element>
+		<element kind="line" uuid="1423644f-ffd3-4e3f-b346-1ac5ea0b54d2" x="373" y="153" width="175" height="1">
+			<pen lineWidth="0.75"/>
+		</element>
+		<element kind="staticText" uuid="72b71850-ce48-4f4e-9753-2064a804b7a6" x="373" y="155" width="175" height="16" fontName="SansSerif" fontSize="8.5" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Admin UD. ILHAM JAYA]]></text>
+		</element>
+	</summary>
+</jasperReport>

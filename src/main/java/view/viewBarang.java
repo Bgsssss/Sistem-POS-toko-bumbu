@@ -602,7 +602,7 @@ public class viewBarang extends javax.swing.JInternalFrame {
         try {
             Connection conn = new Koneksi().getConnect();
             HashMap<String, Object> parameter = new HashMap<>();
-            InputStream is = getClass().getResourceAsStream("/laporan/laporanBarangv3.jrxml");
+            InputStream is = getClass().getResourceAsStream("/laporan/laporanBarang.jrxml");
             JasperReport jr = JasperCompileManager.compileReport(is);
             JasperPrint jp = JasperFillManager.fillReport(jr, parameter, conn);
             JasperViewer.viewReport(jp, false);
