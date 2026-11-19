@@ -35,8 +35,9 @@ public class viewKasir extends javax.swing.JInternalFrame {
         model.setRowCount(0);
         model.addColumn("Id Barang");
         model.addColumn("Nama Barang");
-        model.addColumn("Harga Barang");
-        model.addColumn("Qty Barang");
+        model.addColumn("Berat (gram)");
+        model.addColumn("Harga Satuan");
+        model.addColumn("Qty");
         model.addColumn("Sub Total");
 
         jmlBeli.setValue(1);
@@ -89,7 +90,7 @@ public class viewKasir extends javax.swing.JInternalFrame {
             t.setBackground(Tema.PUTIH);
             t.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(Tema.GARIS),
-                    BorderFactory.createEmptyBorder(2, 6, 2, 6)));
+                    BorderFactory.createEmptyBorder(1, 6, 1, 6)));   // <-- UBAH (sebelumnya 2,6,2,6)
         }
         // Kolom yang diisi otomatis
         total.setEditable(false);
@@ -110,6 +111,49 @@ public class viewKasir extends javax.swing.JInternalFrame {
         Tema.tabel(tabelKasir);
         jScrollPane1.getViewport().setBackground(Tema.PUTIH);
         jScrollPane1.setBorder(BorderFactory.createLineBorder(Tema.GARIS));
+
+        // ===== Susun ulang layout: tabel yang fleksibel =====   // <-- BARU (sampai akhir method)
+        java.awt.Container c = getContentPane();
+        c.removeAll();
+        c.setLayout(new java.awt.GridBagLayout());
+
+        javax.swing.JPanel atas = new javax.swing.JPanel(new java.awt.BorderLayout(36, 0));
+        atas.setOpaque(false);
+        atas.add(jPanel1, java.awt.BorderLayout.WEST);
+        atas.add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        // Panel atas dan bawah tidak boleh mengecil dari tinggi aslinya
+        atas.setMinimumSize(atas.getPreferredSize());
+        jPanel3.setMinimumSize(jPanel3.getPreferredSize());
+
+        // Tabel boleh menyusut sampai 60px
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(100, 156));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(100, 60));
+
+        java.awt.GridBagConstraints g = new java.awt.GridBagConstraints();
+        g.gridx = 0;
+        g.weightx = 1;
+
+        g.gridy = 0;                       // baris atas (tinggi tetap)
+        g.weighty = 0;
+        g.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        g.insets = new java.awt.Insets(10, 10, 0, 10);
+        c.add(atas, g);
+
+        g.gridy = 1;                       // tabel (menyerap sisa/kurang tinggi)
+        g.weighty = 1;
+        g.fill = java.awt.GridBagConstraints.BOTH;
+        g.insets = new java.awt.Insets(15, 10, 0, 10);
+        c.add(jScrollPane1, g);
+
+        g.gridy = 2;                       // pembayaran (tinggi tetap)
+        g.weighty = 0;
+        g.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        g.insets = new java.awt.Insets(15, 10, 10, 10);
+        c.add(jPanel3, g);
+
+        c.revalidate();
+        c.repaint();
     }
 
     public String getIdBarang() {
@@ -339,7 +383,7 @@ public class viewKasir extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addGap(0, 319, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(labelTotalHarga, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -494,7 +538,7 @@ public class viewKasir extends javax.swing.JInternalFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -506,10 +550,10 @@ public class viewKasir extends javax.swing.JInternalFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -523,49 +567,15 @@ public class viewKasir extends javax.swing.JInternalFrame {
 
     private void tombolTambahBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolTambahBarangActionPerformed
         // TODO add your handling code here:
-        if (namaBarang.getText().equals("") || hargaBarang.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Data barang belum diisi");
-        } else if (Integer.parseInt(jmlBeli.getValue().toString()) <= 0) {
-            JOptionPane.showMessageDialog(null, "Jumlah Barang tidak benar");
-        } else {
-            Object[] hasil;
-            hasil = new Object[5];
-            hasil[0] = idBarang;
-            hasil[1] = namaBarang.getText();
-            hasil[2] = hargaBarang.getText();
-            hasil[3] = jmlBeli.getValue().toString();
-            hasil[4] = Integer.parseInt(jmlBeli.getValue().toString()) * Integer.parseInt(hargaBarang.getText());
-
-            model.addRow(hasil);
-
-            Integer totalHarga = 0;
-            Integer jumlahQty = 0;
-            if (Integer.parseInt(total.getText()) == 0) {
-                int subtotal = Integer.parseInt(tabelKasir.getValueAt(0, 4).toString());
-                int qty = Integer.parseInt(tabelKasir.getValueAt(0, 3).toString());
-                totalHarga = subtotal;
-                jumlahQty = qty;
-            } else {
-                for (int i = 0; i < model.getRowCount(); i++) {
-                    int subtotal = Integer.parseInt(tabelKasir.getValueAt(i, 4).toString());
-                    totalHarga = totalHarga + subtotal;
-                    int qty = Integer.parseInt(tabelKasir.getValueAt(i, 3).toString());
-                    jumlahQty = jumlahQty + qty;
-                }
-            }
-            total.setText(String.valueOf(totalHarga));
-            labelTotalHarga.setText(new java.text.DecimalFormat("#,##0",
-                    new java.text.DecimalFormatSymbols(java.util.Locale.forLanguageTag("id-ID")))
-                    .format(totalHarga));
-            jumlahBarang.setText(String.valueOf(jumlahQty));
-        }
+        cK.tambahBarang();
     }//GEN-LAST:event_tombolTambahBarangActionPerformed
 
     private void tombolSelesaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolSelesaiActionPerformed
         // TODO add your handling code here:
-        cK.simpanTransaksi();
-        cK.resetForm();
-        cK.controlButtonBayar();
+        if (cK.simpanTransaksi()) {
+            cK.resetForm();
+            cK.controlButtonBayar();
+        }
     }//GEN-LAST:event_tombolSelesaiActionPerformed
 
     private void tombolBayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolBayarActionPerformed
@@ -573,8 +583,9 @@ public class viewKasir extends javax.swing.JInternalFrame {
         if (namaPembeli.getText().equals("") || bayar.getText().equals("") || jumlahBarang.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
         } else {
-            cK.bayar();
-            cK.controlButtonSelesai();
+            if (cK.bayar()) {
+                cK.controlButtonSelesai();
+            }
         }
     }//GEN-LAST:event_tombolBayarActionPerformed
 

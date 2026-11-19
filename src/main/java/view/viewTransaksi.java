@@ -5,9 +5,28 @@
  */
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.sql.PreparedStatement;
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import model.Kasir;
+import com.bumbu.Dialog;
+import com.bumbu.Struk;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import com.bumbu.Tema;
 import database.Koneksi;
-import java.io.File;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -30,6 +49,13 @@ public class viewTransaksi extends javax.swing.JInternalFrame {
      * Creates new form viewTransaksi
      */
     private DefaultTableModel model;
+    private DefaultTableModel modelPilih, modelDetail;
+    private JTable tabelPilih, tabelDetail;
+    private JTextField tfCari;
+    private JButton tombolStruk;
+    private JLabel lblInfo;
+    private final List<Long> idDaftar = new ArrayList<>();   // idTransaksi per baris tabelPilih
+    private Struk.Data dataStruk;
 
     public viewTransaksi() {
         initComponents();
@@ -47,6 +73,8 @@ public class viewTransaksi extends javax.swing.JInternalFrame {
         Tema.tombolBiasa(tombolCetak, "printer");
 
         tampilDataTransaksi();
+        susunTab();
+        muatDaftar("");
     }
 
     private void tampilDataTransaksi() {
@@ -72,6 +100,216 @@ public class viewTransaksi extends javax.swing.JInternalFrame {
             }
         } catch (SQLException ex) {
             Logger.getLogger(viewTransaksi.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private static String rp(long n) {
+        return "Rp" + java.text.NumberFormat.getIntegerInstance(
+                new java.util.Locale("id", "ID")).format(n);
+    }
+
+    private void susunTab() {
+        // ---------- Tab 1: Ringkasan (komponen lama dipindah) ----------
+        JPanel tabRingkasan = new JPanel(new BorderLayout(0, 10));
+        tabRingkasan.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        tabRingkasan.add(jScrollPane1, BorderLayout.CENTER);
+        JPanel barisCetak = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        barisCetak.add(tombolCetak);
+        tabRingkasan.add(barisCetak, BorderLayout.SOUTH);
+
+        // ---------- Tab 2: Detail & Cetak Struk ----------
+        modelPilih = new DefaultTableModel(
+                new Object[]{"NO. TX", "TANGGAL", "PEMBELI", "TOTAL"}, 0) {
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
+        };
+        modelDetail = new DefaultTableModel(
+                new Object[]{"BARANG", "BERAT", "HARGA", "QTY", "SUBTOTAL"}, 0) {
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
+        };
+        tabelPilih = new JTable(modelPilih);
+        tabelPilih.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabelDetail = new JTable(modelDetail);
+        Tema.tabel(tabelPilih);
+        Tema.tabel(tabelDetail);
+
+        tabelPilih.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                muatDetail();
+            }
+        });
+
+        tfCari = new JTextField();
+        tfCari.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                muatDaftar(tfCari.getText().trim());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                muatDaftar(tfCari.getText().trim());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
+
+        JPanel atas = new JPanel(new BorderLayout(8, 0));
+        atas.add(new JLabel("Cari (No. TX / pembeli):"), BorderLayout.WEST);
+        atas.add(tfCari, BorderLayout.CENTER);
+
+        JPanel panelDaftar = new JPanel(new BorderLayout(0, 6));
+        panelDaftar.add(atas, BorderLayout.NORTH);
+        panelDaftar.add(new JScrollPane(tabelPilih), BorderLayout.CENTER);
+
+        JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                panelDaftar, new JScrollPane(tabelDetail));
+        split.setResizeWeight(0.55);
+        split.setBorder(null);
+
+        lblInfo = new JLabel();
+        tombolStruk = new JButton("Cetak Struk");
+        Tema.tombolUtama(tombolStruk, "receipt");
+        tombolStruk.addActionListener(e -> {
+            if (dataStruk != null) {
+                Struk.tampilkan(this, dataStruk);
+            }
+        });
+        JPanel bawah = new JPanel(new BorderLayout());
+        bawah.add(lblInfo, BorderLayout.WEST);
+        bawah.add(tombolStruk, BorderLayout.EAST);
+
+        JPanel tabStruk = new JPanel(new BorderLayout(0, 10));
+        tabStruk.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        tabStruk.add(split, BorderLayout.CENTER);
+        tabStruk.add(bawah, BorderLayout.SOUTH);
+
+        // ---------- Pasang ke frame ----------
+        JTabbedPane tab = new JTabbedPane();
+        tab.setFont(Tema.FONT_MENU);
+        tab.addTab("Ringkasan", tabRingkasan);
+        tab.addTab("Detail & Cetak Struk", tabStruk);
+
+        getContentPane().removeAll();
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(jPanel1, BorderLayout.NORTH);   // banner "TRANSAKSI"
+        getContentPane().add(tab, BorderLayout.CENTER);
+        getContentPane().revalidate();
+        getContentPane().repaint();
+    }
+
+    /**
+     * Isi tabel atas (daftar transaksi), terbaru di atas, dengan filter cari.
+     */
+    private void muatDaftar(String kata) {
+        modelPilih.setRowCount(0);
+        modelDetail.setRowCount(0);
+        idDaftar.clear();
+        dataStruk = null;
+        tombolStruk.setEnabled(false);
+        lblInfo.setText("Pilih satu transaksi di atas");
+
+        String sql = "SELECT idTransaksi, noTransaksi, tglTransaksi, namaPembeli, total "
+                + "FROM transaksi WHERE noTransaksi LIKE ? OR namaPembeli LIKE ? "
+                + "ORDER BY idTransaksi DESC";
+        try (PreparedStatement ps = Koneksi.getConnect().prepareStatement(sql)) {
+            ps.setString(1, "%" + kata + "%");
+            ps.setString(2, "%" + kata + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    long id = rs.getLong("idTransaksi");
+                    String no = rs.getString("noTransaksi");
+                    if (no == null) {                       // data lama sebelum ada noTransaksi
+                        no = String.format("TX-%04d", id);
+                    }
+                    idDaftar.add(id);
+                    modelPilih.addRow(new Object[]{
+                        no,
+                        rs.getString("tglTransaksi"),
+                        rs.getString("namaPembeli"),
+                        rp(rs.getBigDecimal("total").longValue())
+                    });
+                }
+            }
+        } catch (SQLException ex) {
+            Dialog.error(this, "Gagal membaca transaksi\n" + ex.getMessage());
+        }
+    }
+
+    /**
+     * Isi tabel bawah (barang) + siapkan data struk untuk transaksi terpilih.
+     */
+    private void muatDetail() {
+        modelDetail.setRowCount(0);
+        dataStruk = null;
+        tombolStruk.setEnabled(false);
+
+        int baris = tabelPilih.getSelectedRow();
+        if (baris < 0 || baris >= idDaftar.size()) {
+            lblInfo.setText("Pilih satu transaksi di atas");
+            return;
+        }
+        long id = idDaftar.get(baris);
+
+        try {
+            Connection c = Koneksi.getConnect();
+            Struk.Data d = new Struk.Data();
+            d.salinan = true;     // cetak ulang -> "*** SALINAN ***"
+            d.kasir = null;       // belum tersimpan di database (opsi 2)
+            d.bayar = 0;          // belum tersimpan -> Tunai/Kembali disembunyikan
+
+            try (PreparedStatement ps = c.prepareStatement(
+                    "SELECT noTransaksi, tglTransaksi, namaPembeli, total "
+                    + "FROM transaksi WHERE idTransaksi = ?")) {
+                ps.setLong(1, id);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (!rs.next()) {
+                        return;
+                    }
+                    String no = rs.getString("noTransaksi");
+                    d.noTransaksi = (no != null) ? no : String.format("TX-%04d", id);
+                    d.waktu = rs.getTimestamp("tglTransaksi").toLocalDateTime();
+                    d.pembeli = rs.getString("namaPembeli");
+                    d.total = rs.getBigDecimal("total").longValue();
+                }
+            }
+
+            try (PreparedStatement ps = c.prepareStatement(
+                    "SELECT idBarang, namaBarang, beratGram, hargaSatuan, qty "
+                    + "FROM detail_transaksi WHERE idTransaksi = ?")) {
+                ps.setLong(1, id);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Kasir.Item it = new Kasir.Item();
+                        it.idBarang = rs.getInt("idBarang");
+                        it.namaBarang = rs.getString("namaBarang");
+                        it.beratGram = rs.getInt("beratGram");
+                        it.hargaSatuan = rs.getBigDecimal("hargaSatuan").longValue();
+                        it.qty = rs.getInt("qty");
+                        d.items.add(it);
+
+                        modelDetail.addRow(new Object[]{
+                            it.namaBarang,
+                            it.beratGram + " gr",
+                            rp(it.hargaSatuan),
+                            it.qty,
+                            rp(it.subtotal())
+                        });
+                    }
+                }
+            }
+
+            dataStruk = d;
+            tombolStruk.setEnabled(true);
+        } catch (SQLException ex) {
+            Dialog.error(this, "Gagal membaca detail transaksi\n" + ex.getMessage());
         }
     }
 

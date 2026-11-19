@@ -14,8 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
-
-
 public class viewCariBarang extends javax.swing.JFrame {
 
     /**
@@ -23,24 +21,26 @@ public class viewCariBarang extends javax.swing.JFrame {
      */
     private final viewKasir vK;
     private final DefaultTableModel model;
+
     public viewCariBarang(viewKasir vK) {
         initComponents();
         this.vK = vK;
-        
+
         model = new DefaultTableModel();
         tabelBarang.setModel(model);
         model.addColumn("Id Barang");
         model.addColumn("Nama Barang");
         model.addColumn("Kategori");
+        model.addColumn("Berat Gram");
         model.addColumn("Modal");
         model.addColumn("Harga Jual");
         model.addColumn("Stok");
         tampilDataBarang();
-        
+
         tabelBarang.getColumnModel().getColumn(0).setMinWidth(0);
         tabelBarang.getColumnModel().getColumn(0).setMaxWidth(0);
         tabelBarang.getColumnModel().getColumn(0).setWidth(0);
-        
+
         Tema.latarJendela(this);
         Tema.tabel(tabelBarang);
         jLabel1.setBackground(Tema.MERAH);
@@ -51,28 +51,29 @@ public class viewCariBarang extends javax.swing.JFrame {
         jScrollPane1.getViewport().setBackground(Tema.PUTIH);
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(Tema.GARIS));
     }
-    
-    private void tampilDataBarang(){
+
+    private void tampilDataBarang() {
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
-        
+
         String sql = "SELECT * FROM barang";
         try {
             Statement stat = Koneksi.getConnect().createStatement();
             ResultSet res = stat.executeQuery(sql);
-            
-            while(res.next()){
+
+            while (res.next()) {
                 //mengambil hasil query variable sql
                 Object[] hasil;
-                hasil = new Object[6]; // karena ada 6 field
+                hasil = new Object[7]; // karena ada 6 field
                 hasil[0] = res.getString("idBarang");
                 hasil[1] = res.getString("namaBarang");
                 hasil[2] = res.getString("kategori");
-                hasil[3] = res.getString("modal");
-                hasil[4] = res.getString("hargaJual");
-                hasil[5] = res.getString("stok");
-                
-                model.addRow(hasil);                  
+                hasil[3] = res.getString("beratGram");
+                hasil[4] = res.getBigDecimal("modal").toBigInteger().toString();
+                hasil[5] = res.getBigDecimal("hargaJual").toBigInteger().toString();
+                hasil[6] = res.getString("stok");
+
+                model.addRow(hasil);
             }
         } catch (SQLException ex) {
             Logger.getLogger(viewCariBarang.class.getName()).log(Level.SEVERE, null, ex);
@@ -145,19 +146,22 @@ public class viewCariBarang extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tabelBarangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelBarangMousePressed
-        //fungsi untuk mengambil data barang saat di klik
+
         int listBarangAmbil = tabelBarang.getSelectedRow();
+        if (listBarangAmbil == -1) {
+            return; // cegah error jika belum ada baris yang terpilih
+        }
+       
         vK.setIdBarang(tabelBarang.getValueAt(listBarangAmbil, 0).toString());
-        vK.getNamaBarang().setText(tabelBarang.getValueAt(listBarangAmbil,1).toString());
-        vK.getHargaBarang().setText(tabelBarang.getValueAt(listBarangAmbil,4).toString());
-        
+        vK.getNamaBarang().setText(tabelBarang.getValueAt(listBarangAmbil, 1).toString());
+        vK.getHargaBarang().setText(tabelBarang.getValueAt(listBarangAmbil, 5).toString());
+
         this.dispose();
     }//GEN-LAST:event_tabelBarangMousePressed
 
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

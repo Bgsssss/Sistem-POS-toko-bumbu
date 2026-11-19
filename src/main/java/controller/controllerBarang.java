@@ -22,10 +22,13 @@ public class controllerBarang {
         vB.getIdBarang().setText("");
         vB.getNamaBarang().setText("");
         vB.getKategori().setSelectedItem("");
+        vB.getBerat().setText("250");
         vB.getModal().setText("");
         vB.getHargaJual().setText("");
         vB.getStok().setValue(0);
-        vB.getPemasok().setSelectedIndex(0);
+        if (vB.getPemasok().getItemCount() > 0) {
+            vB.getPemasok().setSelectedIndex(0);
+        }
     }
 
     public void controlButton() {
@@ -46,6 +49,7 @@ public class controllerBarang {
         barang = new Barang();
         barang.setNamaBarang(vB.getNamaBarang().getText());
         barang.setKategori(vB.getKategori().getSelectedItem().toString());
+        barang.setBeratGram(vB.getBerat().getText());
         barang.setModal(vB.getModal().getText());
         barang.setHargaJual(vB.getHargaJual().getText());
         barang.setStok(Integer.parseInt(vB.getStok().getValue().toString()));
@@ -63,6 +67,7 @@ public class controllerBarang {
         barang.setIdBarang(vB.getIdBarang().getText());
         barang.setNamaBarang(vB.getNamaBarang().getText());
         barang.setKategori(vB.getKategori().getSelectedItem().toString());
+        barang.setBeratGram(vB.getBerat().getText());
         barang.setModal(vB.getModal().getText());
         barang.setHargaJual(vB.getHargaJual().getText());
         barang.setStok(Integer.parseInt(vB.getStok().getValue().toString()));

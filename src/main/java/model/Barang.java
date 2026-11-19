@@ -18,12 +18,21 @@ public class Barang {
     private String idBarang;
     private String namaBarang;
     private String kategori;
+    private String beratGram;
     private String modal;
     private String hargaJual;
     private int stok;
     private String idPemasok;
 
     Koneksi koneksi = new Koneksi();
+
+    public String getBeratGram() {
+        return beratGram;
+    }
+
+    public void setBeratGram(String beratGram) {
+        this.beratGram = beratGram;
+    }
 
     public String getIdPemasok() {
         return idPemasok;
@@ -82,43 +91,44 @@ public class Barang {
     }
 
     public void simpanDataBarang() {
-        //inisialisasi query untuk insert kedalam database
-        String sql = ("INSERT INTO barang (namaBarang, kategori, modal, hargaJual, stok, idPemasok) "
-                + " VALUES ('" + getNamaBarang() + "', '" + getKategori() + "' "
-                + ", '" + getModal() + "', '" + getHargaJual() + "', '" + getStok() + "', '" + getIdPemasok() + "')");
-
+        String sql = "INSERT INTO barang (namaBarang, kategori, beratGram, modal, hargaJual, stok, idPemasok) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
-            //inisialisasi preparedStatement
             PreparedStatement eksekusi = koneksi.getConnect().prepareStatement(sql);
-            eksekusi.execute();
-            //pemberitahuan jika data berhasil disimpan
-            Dialog.info(null, "Data Berhasil Disimpan");
+            eksekusi.setString(1, getNamaBarang());
+            eksekusi.setString(2, getKategori());
+            eksekusi.setString(3, getBeratGram());
+            eksekusi.setString(4, getModal());
+            eksekusi.setString(5, getHargaJual());
+            eksekusi.setInt(6, getStok());
+            eksekusi.setString(7, getIdPemasok());
+            eksekusi.executeUpdate();
 
+            Dialog.info(null, "Data Berhasil Disimpan");
         } catch (SQLException ex) {
             Dialog.error(null, "Data Gagal Disimpan\n" + ex.getMessage());
         }
-
     }
 
     public void ubahDataBarang() {
-        //inisialisasi query untuk update kedalam database
-        String sql = "UPDATE barang SET namaBarang = '" + getNamaBarang() + "'"
-                + ", kategori = '" + getKategori() + "'"
-                + ", modal = '" + getModal() + "'"
-                + ", hargaJual = '" + getHargaJual() + "'"
-                + ", stok = '" + getStok() + "'"
-                + ", idPemasok = '" + getIdPemasok() + "' WHERE idBarang = '" + getIdBarang() + "'";
-        try {
-            //inisialisasi preparedStatement
-            PreparedStatement eksekusi = koneksi.getConnect().prepareStatement(sql);
-            eksekusi.execute();
-            //pemberitahuan jika data berhasil disimpan
-            Dialog.info(null, "Data Berhasil Diubah");
+        String sql = "UPDATE barang SET namaBarang = ?, kategori = ?, beratGram = ?, "
+                + "modal = ?, hargaJual = ?, stok = ?, idPemasok = ? WHERE idBarang = ?";
 
+        try {
+            PreparedStatement eksekusi = koneksi.getConnect().prepareStatement(sql);
+            eksekusi.setString(1, getNamaBarang());
+            eksekusi.setString(2, getKategori());
+            eksekusi.setString(3, getBeratGram());
+            eksekusi.setString(4, getModal());
+            eksekusi.setString(5, getHargaJual());
+            eksekusi.setInt(6, getStok());
+            eksekusi.setString(7, getIdPemasok());
+            eksekusi.setString(8, getIdBarang());
+            eksekusi.executeUpdate();
+
+            Dialog.info(null, "Data Berhasil Diubah");
         } catch (SQLException ex) {
             Dialog.error(null, "Data Gagal Diubah\n" + ex.getMessage());
         }
-
     }
 
     public boolean hapusDataBarang() {

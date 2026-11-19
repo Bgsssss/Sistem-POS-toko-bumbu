@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import com.bumbu.mainAppAdm;
 import database.Koneksi;
+import model.Sesi;
 import view.viewLogin;
 
 public class controllerLogin {
@@ -27,6 +28,11 @@ public class controllerLogin {
             ps.setString(2, new String(vL.getPassword().getPassword()));
             ResultSet res = ps.executeQuery();
             if (res.next()) {
+                if (res.next()) {
+                    Sesi.namaKasir = vL.getUsername().getText();
+                    vL.dispose();
+                    new mainAppAdm().setVisible(true);
+                }
                 vL.dispose();
                 new mainAppAdm().setVisible(true);
             } else {

@@ -49,57 +49,58 @@ public class viewBarang extends javax.swing.JInternalFrame {
         model.addColumn("ID");
         model.addColumn("NAMA");
         model.addColumn("KATEGORI");
+        model.addColumn("BERAT GRAM");
         model.addColumn("MODAL");
         model.addColumn("HRG JUAL");
         model.addColumn("STOK");
         model.addColumn("ID PEMASOK");
 
         terapkanTema();
-        
+
         tampilDataBarang();
         cB.controlButton();
     }
-    
+
     private void terapkanTema() {
         // latar
         getContentPane().setBackground(Tema.PUTIH);
         jPanel1.setBackground(Tema.PUTIH);
- 
+
         // banner judul
         Tema.banner(jPanel2, jLabel5);
- 
+
         // tabel
         Tema.tabel(tabelBarang);
         jScrollPane1.getViewport().setBackground(Tema.PUTIH);
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(Tema.GARIS));
- 
+
         // tombol
         Tema.tombolUtama(tombolTambah, "plus");
         Tema.tombolUtama(tombolEdit, "square-pen");
         Tema.tombolUtama(tombolCetak, "printer");
         Tema.tombolHapus(tombolHapus, "trash-2");
         Tema.tombolBiasa(tombolBatal, "eraser");
- 
+
         // label form
-        javax.swing.JLabel[] labels = {jLabel1, jLabel2, jLabel3, jLabel4, jLabel6, jLabel7, jLabel8};
+        javax.swing.JLabel[] labels = {jLabel1, jLabel2, jLabel3, jLabel4, jLabel6, jLabel7, jLabel8, jLabel9};
         for (javax.swing.JLabel l : labels) {
             l.setFont(Tema.FONT_NORMAL);
             l.setForeground(Tema.TEKS);
         }
- 
+
         // input form
-        JTextField[] fields = {idBarang, namaBarang, modal, hargaJual};
+        JTextField[] fields = {idBarang, namaBarang, modal, hargaJual, berat};
         for (JTextField f : fields) {
             f.setFont(Tema.FONT_NORMAL);
             f.setForeground(Tema.TEKS);
         }
         idBarang.setBackground(Tema.PANEL);
+        berat.setBackground(Tema.PANEL);
         kategori.setFont(Tema.FONT_NORMAL);
         pemasok.setFont(Tema.FONT_NORMAL);
         stok.setFont(Tema.FONT_NORMAL);
     }
-    
-    
+
     public JTextField getHargaJual() {
         return hargaJual;
     }
@@ -111,7 +112,7 @@ public class viewBarang extends javax.swing.JInternalFrame {
     public JComboBox<String> getKategori() {
         return kategori;
     }
-    
+
     public JComboBox<String> getPemasok() {
         return pemasok;
     }
@@ -144,6 +145,10 @@ public class viewBarang extends javax.swing.JInternalFrame {
         return tombolTambah;
     }
 
+    public JTextField getBerat() {
+        return berat;
+    }
+
     private void tampilDataBarang() {
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
@@ -156,14 +161,15 @@ public class viewBarang extends javax.swing.JInternalFrame {
             while (res.next()) {
                 //mengambil hasil query variable sql
                 Object[] hasil;
-                hasil = new Object[7]; // karena ada 7 field
+                hasil = new Object[8];
                 hasil[0] = res.getString("idBarang");
                 hasil[1] = res.getString("namaBarang");
                 hasil[2] = res.getString("kategori");
-                hasil[3] = res.getString("modal");
-                hasil[4] = res.getString("hargaJual");
-                hasil[5] = res.getString("stok");
-                hasil[6] = res.getString("idPemasok");
+                hasil[3] = res.getString("beratGram");
+                hasil[4] = res.getString("modal");
+                hasil[5] = res.getString("hargaJual");
+                hasil[6] = res.getString("stok");
+                hasil[7] = res.getString("idPemasok");
 
                 model.addRow(hasil);
             }
@@ -178,27 +184,29 @@ public class viewBarang extends javax.swing.JInternalFrame {
         String id = String.valueOf(tabelBarang.getValueAt(index, 0));
         String nama = String.valueOf(tabelBarang.getValueAt(index, 1));
         String kat = String.valueOf(tabelBarang.getValueAt(index, 2));
-        String mod = String.valueOf(tabelBarang.getValueAt(index, 3));
-        String jual = String.valueOf(tabelBarang.getValueAt(index, 4));
-        String stk = String.valueOf(tabelBarang.getValueAt(index, 5));
-        String idPemasok = String.valueOf(tabelBarang.getValueAt(index, 6));
+        String brt = String.valueOf(tabelBarang.getValueAt(index, 3));
+        String mod = String.valueOf(tabelBarang.getValueAt(index, 4));
+        String jual = String.valueOf(tabelBarang.getValueAt(index, 5));
+        String stk = String.valueOf(tabelBarang.getValueAt(index, 6));
+        String idPemasok = String.valueOf(tabelBarang.getValueAt(index, 7));
 
         //mengisi nilai kedalam textField
         idBarang.setText(id);
         namaBarang.setText(nama);
         kategori.setSelectedItem(kat);
+        berat.setText(brt);
         modal.setText(mod);
         hargaJual.setText(jual);
         stok.setValue(Integer.parseInt(stk));
-        
-        for (int i = 0; i < pemasok.getItemCount(); i++) {
-        String item = pemasok.getItemAt(i);
 
-        if (item.startsWith(idPemasok + " -")) {
-            pemasok.setSelectedIndex(i);
-            break;
+        for (int i = 0; i < pemasok.getItemCount(); i++) {
+            String item = pemasok.getItemAt(i);
+
+            if (item.startsWith(idPemasok + " -")) {
+                pemasok.setSelectedIndex(i);
+                break;
+            }
         }
-    }
 
         cB.controlButton2();
     }
@@ -255,6 +263,8 @@ public class viewBarang extends javax.swing.JInternalFrame {
         tombolCetak = new javax.swing.JButton();
         pemasok = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
+        berat = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
 
@@ -365,6 +375,16 @@ public class viewBarang extends javax.swing.JInternalFrame {
 
         jLabel8.setText("Pemasok");
 
+        berat.setEditable(false);
+        berat.setText("250");
+        berat.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                beratKeyTyped(evt);
+            }
+        });
+
+        jLabel9.setText("Berat (g)");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -385,19 +405,19 @@ public class viewBarang extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
-                        .addGap(82, 82, 82)
-                        .addComponent(stok, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel9))
                         .addGap(33, 33, 33)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(namaBarang, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(idBarang)
-                            .addComponent(kategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(kategori, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(berat, javax.swing.GroupLayout.Alignment.LEADING))))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -407,9 +427,12 @@ public class viewBarang extends javax.swing.JInternalFrame {
                     .addComponent(jLabel3))
                 .addGap(50, 50, 50)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(stok, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(hargaJual)
                     .addComponent(modal)
-                    .addComponent(pemasok, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pemasok, 0, 174, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -429,9 +452,13 @@ public class viewBarang extends javax.swing.JInternalFrame {
                     .addComponent(kategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
+                    .addComponent(berat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
                 .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(pemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(modal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
@@ -443,7 +470,7 @@ public class viewBarang extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(stok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(tombolCetak)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -575,7 +602,7 @@ public class viewBarang extends javax.swing.JInternalFrame {
         try {
             Connection conn = new Koneksi().getConnect();
             HashMap<String, Object> parameter = new HashMap<>();
-            InputStream is = getClass().getResourceAsStream("/laporan/laporanBarang.jrxml");
+            InputStream is = getClass().getResourceAsStream("/laporan/laporanBarangv3.jrxml");
             JasperReport jr = JasperCompileManager.compileReport(is);
             JasperPrint jp = JasperFillManager.fillReport(jr, parameter, conn);
             JasperViewer.viewReport(jp, false);
@@ -592,8 +619,13 @@ public class viewBarang extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_pemasokActionPerformed
 
+    private void beratKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_beratKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_beratKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField berat;
     private javax.swing.JTextField hargaJual;
     private javax.swing.JTextField idBarang;
     private javax.swing.JLabel jLabel1;
@@ -604,6 +636,7 @@ public class viewBarang extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
