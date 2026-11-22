@@ -28,11 +28,7 @@ public class controllerLogin {
             ps.setString(2, new String(vL.getPassword().getPassword()));
             ResultSet res = ps.executeQuery();
             if (res.next()) {
-                if (res.next()) {
-                    Sesi.namaKasir = vL.getUsername().getText();
-                    vL.dispose();
-                    new mainAppAdm().setVisible(true);
-                }
+                Sesi.namaKasir = res.getString("username");
                 vL.dispose();
                 new mainAppAdm().setVisible(true);
             } else {

@@ -56,14 +56,14 @@ public class Pemasok {
 
     public void simpanDataPemasok() {
         //inisialisasi query untuk insert kedalam database
-        String sql = ("INSERT INTO pemasok (namaPemasok, alamat, kontak) "
-                + " VALUES ('" + getNamaPemasok() + "', '" + getAlamat() + "' "
-                + ", '" + getKontak() + "')");
-
+        String sql = "INSERT INTO pemasok (namaPemasok, alamat, kontak) VALUES (?,?,?)";
         try {
             //inisialisasi preparedStatement
             PreparedStatement eksekusi = koneksi.getConnect().prepareStatement(sql);
-            eksekusi.execute();
+            eksekusi.setString(1, getNamaPemasok());
+            eksekusi.setString(2, getAlamat());
+            eksekusi.setString(3, getKontak());
+            eksekusi.executeUpdate();
             //pemberitahuan jika data berhasil disimpan
             Dialog.info(null, "Data Berhasil Disimpan");
 
@@ -77,14 +77,15 @@ public class Pemasok {
         boolean konfirmasi = Dialog.konfirmasi(null, "Apakah Anda yakin ingin mengubah data pemasok ini?");
         if (konfirmasi) {
             //inisialisasi query untuk update kedalam database
-            String sql = "UPDATE pemasok SET namaPemasok = '" + getNamaPemasok() + "'"
-                    + ", alamat = '" + getAlamat() + "'"
-                    + ", kontak = '" + getKontak() + "'"
-                    + " WHERE idPemasok = '" + getIdPemasok() + "'";
+            String sql = "UPDATE pemasok SET namaPemasok = ? ,alamat = ? ,kontak = ? WHERE idPemasok = ?";
             try {
                 //inisialisasi preparedStatement
                 PreparedStatement eksekusi = koneksi.getConnect().prepareStatement(sql);
-                eksekusi.execute();
+                eksekusi.setString(1, getNamaPemasok());
+                eksekusi.setString(2, getAlamat());
+                eksekusi.setString(3, getKontak());
+                eksekusi.setString(4, getIdPemasok());
+                eksekusi.executeUpdate();
                 //pemberitahuan jika data berhasil disimpan
                 Dialog.info(null, "Data Berhasil Diubah");
                 return true;
@@ -99,16 +100,21 @@ public class Pemasok {
     public boolean hapusDataPemasok() {
         boolean konfirmasi = Dialog.konfirmasi(null, "Apakah Anda yakin ingin menghapus data pemasok ini?");
         if (konfirmasi) {
-            String sql = "DELETE FROM pemasok WHERE idPemasok = '" + getIdPemasok() + "'";
+            String sql = "DELETE FROM pemasok WHERE idPemasok = ?";
             try {
                 //inisialisasi preparedStatement
                 PreparedStatement eksekusi = koneksi.getConnect().prepareStatement(sql);
-                eksekusi.execute();
+                eksekusi.setString(1, getIdPemasok());
+                eksekusi.executeUpdate();
                 //pemberitahuan jika data berhasil disimpan
                 Dialog.info(null, "Data Berhasil Dihapus");
                 return true;
             } catch (SQLException ex) {
-                Dialog.error(null, "Data Gagal Dihapus\n" + ex);
+                if (ex.getErrorCode() == 1451) {
+                    Dialog.error(null, "Pemasok tidak bisa dihapus karena masih dipakai oleh data barang");
+                } else {
+                    Dialog.error(null, "Data Gagal Dihapus\n" + ex);
+                }
                 return false;
             }
         }

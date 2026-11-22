@@ -135,16 +135,21 @@ public class Barang {
 
         boolean konfirmasi = com.bumbu.Dialog.konfirmasi(null, "Apakah Anda yakin ingin menghapus data barang ini?");
         if (konfirmasi) {
-            String sql = "DELETE FROM barang WHERE idBarang = '" + getIdBarang() + "'";
+            String sql = "DELETE FROM barang WHERE idBarang = ?";
             try {
                 //inisialisasi preparedStatement
                 PreparedStatement eksekusi = koneksi.getConnect().prepareStatement(sql);
-                eksekusi.execute();
+                eksekusi.setString(1, getIdBarang());
+                eksekusi.executeUpdate();
                 //pemberitahuan jika data berhasil disimpan
                 Dialog.info(null, "Data Berhasil Dihapus");
                 return true;
             } catch (SQLException ex) {
-                Dialog.error(null, "Data Gagal Dihapus\n" + ex.getMessage());
+                if (ex.getErrorCode() == 1451) {
+                    Dialog.error(null, "Barang tidak bisa dihapus karena sudah terjual");
+                } else {
+                    Dialog.error(null, "Data Gagal Dihapus\n" + ex.getMessage());
+                }
                 return false;
             }
         }
