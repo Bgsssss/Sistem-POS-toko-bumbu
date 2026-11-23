@@ -22,13 +22,12 @@ public class controllerLogin {
     }
 
     public void login() {
-        String sql = "SELECT * FROM user WHERE username=? AND password=?";
-        try (java.sql.PreparedStatement ps = Koneksi.getConnect().prepareStatement(sql)) {
-            ps.setString(1, vL.getUsername().getText());
-            ps.setString(2, new String(vL.getPassword().getPassword()));
-            ResultSet res = ps.executeQuery();
-            if (res.next()) {
-                Sesi.namaKasir = res.getString("username");
+        try {
+            String user = vL.getUsername().getText().trim();
+            String pass = new String(vL.getPassword().getPassword());
+            String nama = controllerUser.verifikasi(user, pass);
+            if (nama != null) {
+                Sesi.namaKasir = nama;
                 vL.dispose();
                 new mainAppAdm().setVisible(true);
             } else {

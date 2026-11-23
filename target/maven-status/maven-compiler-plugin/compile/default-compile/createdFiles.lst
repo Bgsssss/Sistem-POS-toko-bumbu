@@ -46,6 +46,7 @@ com\bumbu\mainAppAdm$5.class
 view\viewLogin$2.class
 view\viewBarang$3.class
 view\viewBarang$10.class
+controller\controllerUser.class
 com\bumbu\Dialog.class
 com\bumbu\mainAppAdm$2.class
 view\viewBarang$6.class
@@ -78,6 +79,7 @@ com\bumbu\mainAppAdm$6.class
 view\viewPemasok$8.class
 view\viewLogin.class
 com\bumbu\Tema$1.class
+security\BCrypt.class
 controller\controllerBarang.class
 view\viewBarang$8.class
 view\viewBarang$2.class

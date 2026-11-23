@@ -7,11 +7,13 @@ D:\Development\project\pos-toko-bumbu\src\main\java\controller\controllerBarang.
 D:\Development\project\pos-toko-bumbu\src\main\java\controller\controllerKasir.java
 D:\Development\project\pos-toko-bumbu\src\main\java\controller\controllerLogin.java
 D:\Development\project\pos-toko-bumbu\src\main\java\controller\controllerPemasok.java
+D:\Development\project\pos-toko-bumbu\src\main\java\controller\controllerUser.java
 D:\Development\project\pos-toko-bumbu\src\main\java\database\Koneksi.java
 D:\Development\project\pos-toko-bumbu\src\main\java\model\Barang.java
 D:\Development\project\pos-toko-bumbu\src\main\java\model\Kasir.java
 D:\Development\project\pos-toko-bumbu\src\main\java\model\Pemasok.java
 D:\Development\project\pos-toko-bumbu\src\main\java\model\Sesi.java
+D:\Development\project\pos-toko-bumbu\src\main\java\security\BCrypt.java
 D:\Development\project\pos-toko-bumbu\src\main\java\view\viewBarang.java
 D:\Development\project\pos-toko-bumbu\src\main\java\view\viewCariBarang.java
 D:\Development\project\pos-toko-bumbu\src\main\java\view\viewKasir.java
