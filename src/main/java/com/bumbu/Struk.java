@@ -26,7 +26,7 @@ import model.Kasir;
 public final class Struk {
 
     // ====== Ubah data toko di sini ======
-    private static final String NAMA_TOKO = "TOKO BUMBU UD. ILHAM JAYA";
+    private static final String NAMA_TOKO = "UD. ILHAM JAYA";
     private static final String ALAMAT_1 = "Pasar Induk Kramat Jati Los C";
     private static final String ALAMAT_2 = "Kelurahan Tengah No. 70, RT 003/RW 007, Kecamatan Kramat Jati, Jakarta Timur";
     private static final String KONTAK = "WA: 085758368039";
