@@ -33,14 +33,14 @@ CREATE TABLE IF NOT EXISTS `barang` (
   KEY `fk_barang_pemasok` (`idPemasok`),
   CONSTRAINT `fk_barang_pemasok` FOREIGN KEY (`idPemasok`) REFERENCES `pemasok` (`idPemasok`),
   CONSTRAINT `barang_chk_1` CHECK ((`stok` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=259 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=260 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table dbtokodesktop.barang: ~40 rows (approximately)
+-- Dumping data for table dbtokodesktop.barang: ~11 rows (approximately)
 INSERT INTO `barang` (`idBarang`, `namaBarang`, `kategori`, `beratGram`, `modal`, `hargaJual`, `stok`, `idPemasok`) VALUES
 	(204, 'Lada hitam halus', 'Halus', 250, 13750.00, 17500.00, 251, 2),
-	(206, 'Ketumbar halus', 'Halus', 250, 6250.00, 8750.00, 262, 4),
+	(206, 'Ketumbar halus', 'Halus', 250, 6250.00, 8750.00, 260, 4),
 	(218, 'Cabai halus', 'Halus', 250, 12000.00, 15000.00, 209, 6),
-	(220, 'Jahe halus', 'Halus', 250, 6000.00, 8000.00, 280, 3),
+	(220, 'Jahe halus', 'Halus', 250, 6000.00, 8000.00, 279, 3),
 	(221, 'Kunyit halus', 'Halus', 250, 5000.00, 7000.00, 366, 4),
 	(224, 'Lada hitam biji', 'Bulat', 250, 12000.00, 15000.00, 274, 2),
 	(239, 'Bawang putih kering', 'Bulat', 250, 8750.00, 11250.00, 147, 2),
@@ -65,9 +65,9 @@ CREATE TABLE IF NOT EXISTS `detail_transaksi` (
   CONSTRAINT `detail_transaksi_ibfk_1` FOREIGN KEY (`idTransaksi`) REFERENCES `transaksi` (`idTransaksi`),
   CONSTRAINT `detail_transaksi_ibfk_2` FOREIGN KEY (`idBarang`) REFERENCES `barang` (`idBarang`),
   CONSTRAINT `detail_transaksi_chk_1` CHECK ((`qty` > 0))
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table dbtokodesktop.detail_transaksi: ~0 rows (approximately)
+-- Dumping data for table dbtokodesktop.detail_transaksi: ~22 rows (approximately)
 INSERT INTO `detail_transaksi` (`idDetail`, `idTransaksi`, `idBarang`, `namaBarang`, `qty`, `beratGram`, `hargaSatuan`, `subtotal`) VALUES
 	(55, 927, 218, 'Cabai halus', 1, 500, 30000.00, 30000.00),
 	(56, 927, 206, 'Ketumbar halus', 1, 250, 8750.00, 8750.00),
@@ -94,7 +94,9 @@ INSERT INTO `detail_transaksi` (`idDetail`, `idTransaksi`, `idBarang`, `namaBara
 	(77, 936, 224, 'Lada hitam biji', 1, 500, 30000.00, 30000.00),
 	(78, 937, 206, 'Ketumbar halus', 1, 250, 8750.00, 8750.00),
 	(79, 938, 218, 'Cabai halus', 1, 250, 15000.00, 15000.00),
-	(80, 938, 221, 'Kunyit halus', 2, 250, 7000.00, 14000.00);
+	(80, 938, 221, 'Kunyit halus', 2, 250, 7000.00, 14000.00),
+	(81, 939, 220, 'Jahe halus', 1, 250, 8000.00, 8000.00),
+	(82, 939, 206, 'Ketumbar halus', 2, 250, 8750.00, 17500.00);
 
 -- Dumping structure for table dbtokodesktop.pemasok
 CREATE TABLE IF NOT EXISTS `pemasok` (
@@ -108,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `pemasok` (
 -- Dumping data for table dbtokodesktop.pemasok: ~5 rows (approximately)
 INSERT INTO `pemasok` (`idPemasok`, `namaPemasok`, `alamat`, `kontak`) VALUES
 	(2, 'Budi ', 'Jakarta Timur', '081234567890'),
-	(3, 'Siti Aminah', 'Bandung', '082345678901'),
+	(3, 'Rudi', 'Bandung', '082345678901'),
 	(4, 'Agus Setiawan', 'Surabaya', '083456789012'),
 	(5, 'Dewi Lestari', 'Yogyakarta', '084567890123'),
 	(6, 'Rudi Hartono', 'Semarang', '085678901234');
@@ -118,29 +120,30 @@ CREATE TABLE IF NOT EXISTS `transaksi` (
   `idTransaksi` int NOT NULL AUTO_INCREMENT,
   `noTransaksi` varchar(20) DEFAULT NULL,
   `namaPembeli` varchar(100) DEFAULT NULL,
-  `jmlBarang` varchar(100) DEFAULT NULL,
+  `jmlBarang` int NOT NULL DEFAULT '0',
   `total` decimal(12,2) NOT NULL,
   `tglTransaksi` datetime NOT NULL,
   `bayar` decimal(15,2) DEFAULT NULL,
   `kasir` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`idTransaksi`),
   UNIQUE KEY `noTransaksi` (`noTransaksi`)
-) ENGINE=InnoDB AUTO_INCREMENT=939 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=940 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table dbtokodesktop.transaksi: ~11 rows (approximately)
+-- Dumping data for table dbtokodesktop.transaksi: ~12 rows (approximately)
 INSERT INTO `transaksi` (`idTransaksi`, `noTransaksi`, `namaPembeli`, `jmlBarang`, `total`, `tglTransaksi`, `bayar`, `kasir`) VALUES
-	(927, 'TX-0927', 'Budi Santoso', '3', 49500.00, '2026-11-19 14:05:00', NULL, NULL),
-	(928, 'TX-0928', 'Siti Aminah', '3', 57000.00, '2026-11-19 14:18:00', NULL, NULL),
-	(929, 'TX-0929', 'Andi Saputra', '3', 73000.00, '2026-11-19 14:32:00', NULL, NULL),
-	(930, 'TX-0930', 'Rina Marlina', '3', 57000.00, '2026-11-19 14:45:00', NULL, NULL),
-	(931, 'TX-0931', 'ucup Kurniawan', '4', 100000.00, '2026-11-19 15:02:00', NULL, NULL),
-	(932, 'TX-0932', 'jamal', '4', 100000.00, '2026-11-19 15:02:00', NULL, NULL),
-	(933, 'TX-0933', 'bagas', '2', 38750.00, '2026-11-19 16:33:42', NULL, NULL),
-	(934, 'TX-0934', 'Uya', '1', 11250.00, '2026-11-19 17:12:55', NULL, NULL),
-	(935, 'TX-0935', 'heru', '1', 17500.00, '2026-11-19 17:14:25', NULL, NULL),
-	(936, 'TX-0936', 'Berry', '1', 30000.00, '2026-11-19 17:20:16', NULL, NULL),
-	(937, 'TX-0937', 'ferry', '1', 8750.00, '2026-11-19 17:56:55', NULL, NULL),
-	(938, 'TX-0938', 'Hendra', '3', 29000.00, '2026-11-19 18:03:46', 30000.00, 'Admin');
+	(927, 'TX-0927', 'Budi Santoso', 3, 49500.00, '2026-11-19 14:05:00', NULL, NULL),
+	(928, 'TX-0928', 'Siti Aminah', 3, 57000.00, '2026-11-19 14:18:00', NULL, NULL),
+	(929, 'TX-0929', 'Andi Saputra', 3, 73000.00, '2026-11-19 14:32:00', NULL, NULL),
+	(930, 'TX-0930', 'Rina Marlina', 3, 57000.00, '2026-11-19 14:45:00', NULL, NULL),
+	(931, 'TX-0931', 'ucup Kurniawan', 4, 100000.00, '2026-11-19 15:02:00', NULL, NULL),
+	(932, 'TX-0932', 'jamal', 4, 100000.00, '2026-11-19 15:02:00', NULL, NULL),
+	(933, 'TX-0933', 'bagas', 2, 38750.00, '2026-11-19 16:33:42', NULL, NULL),
+	(934, 'TX-0934', 'Uya', 1, 11250.00, '2026-11-19 17:12:55', NULL, NULL),
+	(935, 'TX-0935', 'heru', 1, 17500.00, '2026-11-19 17:14:25', NULL, NULL),
+	(936, 'TX-0936', 'Berry', 1, 30000.00, '2026-11-19 17:20:16', NULL, NULL),
+	(937, 'TX-0937', 'ferry', 1, 8750.00, '2026-11-19 17:56:55', NULL, NULL),
+	(938, 'TX-0938', 'Hendra', 3, 29000.00, '2026-11-19 18:03:46', 30000.00, 'Admin'),
+	(939, 'TX-0939', 'Tono', 3, 25500.00, '2026-11-21 22:10:36', 30000.00, 'Admin');
 
 -- Dumping structure for table dbtokodesktop.user
 CREATE TABLE IF NOT EXISTS `user` (
