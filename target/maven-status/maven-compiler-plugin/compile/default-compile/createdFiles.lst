@@ -16,9 +16,11 @@ com\bumbu\Dialog$1.class
 view\viewPendapatan$1.class
 view\viewBarang$4.class
 com\bumbu\mainAppAdm$1.class
+com\bumbu\InputAngka$2.class
 com\bumbu\Tema$3.class
 model\Barang.class
 com\bumbu\AplikasiTokoBumbu.class
+com\bumbu\InputAngka.class
 com\bumbu\Struk$1.class
 view\viewLogin$4.class
 com\bumbu\Dialog$3.class
@@ -61,6 +63,7 @@ view\viewLogin$5.class
 com\bumbu\Struk.class
 model\Kasir$Info.class
 view\viewPemasok$2.class
+com\bumbu\InputAngka$1.class
 view\viewKasir$6.class
 controller\controllerKasir.class
 model\Kasir$Item.class

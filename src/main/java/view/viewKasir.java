@@ -5,6 +5,7 @@
  */
 package view;
 
+import com.bumbu.InputAngka;
 import com.bumbu.Tema;
 import javax.swing.BorderFactory;
 import controller.controllerKasir;
@@ -28,6 +29,7 @@ public class viewKasir extends javax.swing.JInternalFrame {
 
     public viewKasir() {
         initComponents();
+        InputAngka.hanyaAngka(bayar, "Bayar", 12);
         ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
         cK = new controllerKasir(this);
         model = new DefaultTableModel();

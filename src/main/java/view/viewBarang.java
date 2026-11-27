@@ -6,6 +6,7 @@
 package view;
 
 import com.bumbu.Dialog;
+import com.bumbu.InputAngka;
 import com.bumbu.Tema;
 import controller.controllerBarang;
 import database.Koneksi;
@@ -40,6 +41,9 @@ public class viewBarang extends javax.swing.JInternalFrame {
 
     public viewBarang() {
         initComponents();
+        InputAngka.hanyaAngka(berat, "Berat", 6);
+        InputAngka.hanyaAngka(modal, "Modal", 9);
+        InputAngka.hanyaAngka(hargaJual, "Harga jual", 9);
         loadPemasok();
         ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
         cB = new controllerBarang(this);
@@ -194,9 +198,9 @@ public class viewBarang extends javax.swing.JInternalFrame {
         idBarang.setText(id);
         namaBarang.setText(nama);
         kategori.setSelectedItem(kat);
-        berat.setText(brt);
-        modal.setText(mod);
-        hargaJual.setText(jual);
+        berat.setText(InputAngka.keBulat(brt));
+        modal.setText(InputAngka.keBulat(mod));
+        hargaJual.setText(InputAngka.keBulat(jual));
         stok.setValue(Integer.parseInt(stk));
 
         for (int i = 0; i < pemasok.getItemCount(); i++) {
@@ -230,6 +234,32 @@ public class viewBarang extends javax.swing.JInternalFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Gagal load pemasok: " + e.getMessage());
         }
+    }
+
+    private boolean dataBarangValid(boolean bolehStokNol) {
+        if (namaBarang.getText().trim().isEmpty() || berat.getText().trim().isEmpty()
+                || modal.getText().trim().isEmpty() || hargaJual.getText().trim().isEmpty()) {
+            Dialog.peringatan(this, "Data Tidak Boleh Kosong");
+            return false;
+        }
+        if (InputAngka.ambil(berat.getText()) <= 0) {
+            Dialog.peringatan(this, "Berat harus berupa angka bulat lebih dari 0 gram");
+            return false;
+        }
+        if (InputAngka.ambil(modal.getText()) <= 0) {
+            Dialog.peringatan(this, "Modal harus berupa angka bulat lebih dari 0");
+            return false;
+        }
+        if (InputAngka.ambil(hargaJual.getText()) <= 0) {
+            Dialog.peringatan(this, "Harga jual harus berupa angka bulat lebih dari 0");
+            return false;
+        }
+        int jumlahStok = Integer.parseInt(stok.getValue().toString());
+        if (jumlahStok < 0 || (!bolehStokNol && jumlahStok == 0)) {
+            Dialog.peringatan(this, "Jumlah Barang tidak benar");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -534,18 +564,18 @@ public class viewBarang extends javax.swing.JInternalFrame {
 
     private void tombolTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolTambahActionPerformed
         // TODO add your handling code here:
-        if (namaBarang.getText().equals("") || modal.getText().equals("") || hargaJual.getText().equals("")) {
-            Dialog.peringatan(this, "Data Tidak Boleh Kosong");
-        } else if (Integer.parseInt(stok.getValue().toString()) <= 0) {
-            Dialog.peringatan(this, "Jumlah Barang tidak benar");
-        } else {
-            cB.simpanData();
-            tampilDataBarang();
+        if (!dataBarangValid(false)) {
+            return;
         }
+        cB.simpanData();
+        tampilDataBarang();
     }//GEN-LAST:event_tombolTambahActionPerformed
 
     private void tombolEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolEditActionPerformed
         // TODO add your handling code here:
+        if (!dataBarangValid(true)) {
+            return;
+        }
         cB.ubahData();
         tampilDataBarang();
     }//GEN-LAST:event_tombolEditActionPerformed

@@ -105,7 +105,11 @@ public class Barang {
 
             Dialog.info(null, "Data Berhasil Disimpan");
         } catch (SQLException ex) {
-            Dialog.error(null, "Data Gagal Disimpan\n" + ex.getMessage());
+            if (ex.getErrorCode() == 1062) {
+                Dialog.peringatan(null, "Nama barang sudah terdaftar");
+            } else {
+                Dialog.error(null, "Data Gagal Disimpan\n" + ex.getMessage());
+            }
         }
     }
 
@@ -115,7 +119,7 @@ public class Barang {
 
         try {
             PreparedStatement eksekusi = koneksi.getConnect().prepareStatement(sql);
-            eksekusi.setString(1, getNamaBarang());
+            eksekusi.setString(1, getNamaBarang().trim());
             eksekusi.setString(2, getKategori());
             eksekusi.setString(3, getBeratGram());
             eksekusi.setString(4, getModal());
@@ -127,7 +131,11 @@ public class Barang {
 
             Dialog.info(null, "Data Berhasil Diubah");
         } catch (SQLException ex) {
-            Dialog.error(null, "Data Gagal Diubah\n" + ex.getMessage());
+            if (ex.getErrorCode() == 1062) {
+                Dialog.peringatan(null, "Nama barang sudah terdaftar");
+            } else {
+                Dialog.error(null, "Data Gagal Diubah\n" + ex.getMessage());
+            }
         }
     }
 
@@ -139,7 +147,7 @@ public class Barang {
             try {
                 //inisialisasi preparedStatement
                 PreparedStatement eksekusi = koneksi.getConnect().prepareStatement(sql);
-                eksekusi.setString(1, getIdBarang());
+                eksekusi.setString(1, getIdBarang().trim());
                 eksekusi.executeUpdate();
                 //pemberitahuan jika data berhasil disimpan
                 Dialog.info(null, "Data Berhasil Dihapus");

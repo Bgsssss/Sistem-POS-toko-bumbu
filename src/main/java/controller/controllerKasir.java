@@ -1,5 +1,6 @@
 package controller;
 
+import com.bumbu.InputAngka;
 import com.bumbu.Dialog;
 import com.bumbu.Struk;
 import java.text.DecimalFormat;
@@ -122,14 +123,15 @@ public class controllerKasir {
                 new DecimalFormatSymbols(Locale.forLanguageTag("id-ID"))).format(total));
     }
 
-    /**
-     * Hitung kembalian. Mengembalikan false jika belum bisa dibayar.
-     */
     public boolean bayar() {
-        long total = Long.parseLong(vK.getTotal().getText());
-        long bayar = Long.parseLong(vK.getBayar().getText());
+        long total = InputAngka.ambil(vK.getTotal().getText());
+        long bayar = InputAngka.ambil(vK.getBayar().getText());
         if (total <= 0) {
             Dialog.peringatan(vK, "Keranjang masih kosong!");
+            return false;
+        }
+        if (bayar < 0) {
+            Dialog.peringatan(vK, "Uang bayar harus berupa angka bulat");
             return false;
         }
         if (bayar < total) {
@@ -157,7 +159,11 @@ public class controllerKasir {
             return false;
         }
 
-        long bayar = Long.parseLong(vK.getBayar().getText());
+        long bayar = InputAngka.ambil(vK.getBayar().getText());
+        if (bayar < 0) {
+            Dialog.peringatan(vK, "Uang bayar harus berupa angka bulat");
+            return false;
+        }
         Kasir k = new Kasir();
         boolean ok = k.simpanTransaksi(vK.getNamaPembeli().getText().trim(), items, bayar, Sesi.namaKasir);
         if (ok) {
