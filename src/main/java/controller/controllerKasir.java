@@ -49,8 +49,8 @@ public class controllerKasir {
             return;
         }
 
-        // pilihan berat: 1x, 2x, 4x berat paket (250 / 500 / 1000 gram)
-        int[] kelipatan = {1, 2, 4};
+        
+        int[] kelipatan = {1, 2, 3, 4, 8};
         String[] pilihan = new String[kelipatan.length];
         for (int i = 0; i < kelipatan.length; i++) {
             pilihan[i] = (info.beratGram * kelipatan[i]) + " gram";
